@@ -1,3 +1,7 @@
+# DecentraPay
+
+DecentraPay is a decentralized payment protocol that enables secure and reliable on-chain transactions.
+
 # Coinbase Commerce Onchain Payment Protocol
 
 The Coinbase Commerce Onchain Payment Protocol allows payers and merchants to transact using the blockchain as a settlement layer and source of truth.

@@ -1,0 +1,37 @@
+{
+  "name": "decentrapay",
+  "version": "1.0.0",
+  "description": "The Coinbase Commerce Onchain Payment Protocol allows payers and merchants to transact using the blockchain as a settlement layer and source of truth.\r It provides the following benefits over \"traditional\" cryptocurrency payments:",
+  "homepage": "https://github.com/alimirash/DecentraPay#readme",
+  "bugs": {
+    "url": "https://github.com/alimirash/DecentraPay/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alimirash/DecentraPay.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "hardhat test",
+    "compile": "npx hardhat compile"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "^3.0.5",
+    "@openzeppelin/contracts": "^5.0.1",
+    "@uniswap/universal-router": "^2.0.0",
+    "ethers": "^6.11.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "ws": "^8.16.0",
+    "hardhat": "^2.22.1"
+  },
+  "overrides": {
+    "cookie": "0.7.0",
+    "elliptic": "6.6.0"
+  }
+}

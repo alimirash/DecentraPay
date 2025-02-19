@@ -7,8 +7,10 @@ import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import "@openzeppelin/contracts-upgradeable/utils/PausableUpgradeable.sol";
 
 // import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
-import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardTransientUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/ReentrancyGuardUpgradeable.sol";
 import "@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+import "@openzeppelin/contracts/utils/cryptography/MessageHashUtils.sol";
+
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
 import "@uniswap/universal-router/contracts/interfaces/IUniversalRouter.sol";
@@ -29,7 +31,7 @@ bytes32 constant V3_INVALID_AMOUNT_OUT = keccak256(hex"d4e0248e");
 bytes32 constant V3_INVALID_CALLER = keccak256(hex"32b13d91");
 
 // @inheritdoc ITransfers
-contract Transfers is Context, Ownable, Pausable, ReentrancyGuard, Sweepable, ITransfers {
+contract Transfers is Context, Ownable, PausableUpgradeable, ReentrancyGuardUpgradeable, Sweepable, ITransfers {
     using SafeERC20 for IERC20;
     using SafeERC20 for IWrappedNativeCurrency;
 
@@ -60,7 +62,7 @@ contract Transfers is Context, Ownable, Pausable, ReentrancyGuard, Sweepable, IT
         address _initialOperator,
         address _initialFeeDestination,
         IWrappedNativeCurrency _wrappedNativeCurrency
-    ) {
+    ) Ownable(_initialOperator) {
         require(
             address(_uniswap) != address(0) &&
                 address(_permit2) != address(0) &&
@@ -99,7 +101,7 @@ contract Transfers is Context, Ownable, Pausable, ReentrancyGuard, Sweepable, IT
         bytes32 signedMessageHash;
         if (_intent.prefix.length == 0) {
             // Use 'default' message prefix.
-            signedMessageHash = ECDSA.toEthSignedMessageHash(hash);
+            signedMessageHash = MessageHashUtils.toEthSignedMessageHash(hash);
         } else {
             // Use custom message prefix.
             signedMessageHash = keccak256(abi.encodePacked(_intent.prefix, hash));
@@ -810,6 +812,17 @@ contract Transfers is Context, Ownable, Pausable, ReentrancyGuard, Sweepable, IT
         _unpause();
     }
 
+    function _msgSender() internal view virtual override(Context, ContextUpgradeable) returns (address) {
+        return ContextUpgradeable._msgSender();
+    }
+
+    function _msgData() internal view virtual override(Context, ContextUpgradeable) returns (bytes calldata) {
+        return ContextUpgradeable._msgData();
+    }
+
+    function _contextSuffixLength() internal view virtual override(Context, ContextUpgradeable) returns (uint256) {
+        return ContextUpgradeable._contextSuffixLength();
+    }
     // @dev Required to be able to unwrap WETH
     receive() external payable {
         require(msg.sender == address(wrappedNativeCurrency), "only payable for unwrapping");

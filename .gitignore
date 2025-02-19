@@ -8,3 +8,5 @@ coverage.json
 .DS_Store
 .env
 contracts/permit2/
+desktop.ini
+.npmrc

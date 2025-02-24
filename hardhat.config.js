@@ -1,6 +1,8 @@
-require("@nomiclabs/hardhat-waffle");
+require("@nomicfoundation/hardhat-ethers");
+require("dotenv").config();
 
-export default {
+/** @type import('hardhat/config').HardhatUserConfig */
+module.exports = {
   solidity: {
     compilers: [
       {
@@ -25,9 +27,25 @@ export default {
       },
     ],
   },
+  networks: {
+    hardhat: {
+      chainId: 1337
+    },
+    sepolia: {
+      url: `https://sepolia.infura.io/v3/${process.env.INFURA_API_KEY}`,
+      accounts: [process.env.PRIVATE_KEY]
+    },
+    mainnet: {
+      url: `https://mainnet.infura.io/v3/${process.env.INFURA_API_KEY}`,
+      accounts: [process.env.PRIVATE_KEY]
+    }
+  },
   paths: {
     sources: "./contracts",
     cache: "./cache",
     artifacts: "./artifacts"
   },
+  etherscan: {
+    apiKey: process.env.ETHERSCAN_API_KEY
+  }
 };
